@@ -1,20 +1,20 @@
 FROM python:3.11-slim
 
-# Install pipenv
-RUN pip install --upgrade pip && pip install pipenv
+# Upgrade pip
+RUN pip install --upgrade pip
 
 WORKDIR /app
 
-# Copy Pipfile and lock file
-COPY Pipfile Pipfile.lock ./
+# Copy dependencies
+COPY requirements.txt ./
 
-# Install dependencies globally
-RUN pipenv install --system --deploy --ignore-pipfile
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy all project files
 COPY . .
 
-# Expose port (Railway uses $PORT)
+# Expose port (Railway will use $PORT)
 EXPOSE 8000
 
 # Default CMD (for blockchain app; can be overridden for client)
